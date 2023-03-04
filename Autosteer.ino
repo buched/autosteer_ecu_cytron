@@ -9,7 +9,7 @@
 ////////////////// User Settings /////////////////////////
 
 //How many degrees before decreasing Max PWM
-#define LOW_HIGH_DEGREES 3.0
+#define LOW_HIGH_DEGREES 5.0
 
 /*  PWM Frequency ->
      490hz (default) = 0
@@ -33,12 +33,12 @@
 #define PWM1_LPWM  2
 
 //Not Connected for Cytron, Right PWM for IBT2
-#define PWM2_RPWM  3
+#define PWM2_RPWM  33
 
 //--------------------------- Switch Input Pins ------------------------
-#define STEERSW_PIN 32
-#define WORKSW_PIN 34
-#define REMOTE_PIN 37
+#define STEERSW_PIN 6
+#define WORKSW_PIN 7
+#define REMOTE_PIN 8
 
 //Define sensor pin for current or pressure sensor
 #define CURRENT_SENSOR_PIN A17
@@ -198,12 +198,8 @@ void autosteerSetup()
   pinMode(REMOTE_PIN, INPUT_PULLUP);
   pinMode(DIR1_RL_ENABLE, OUTPUT);
 
-  // Disable digital inputs for analog input pins
-  pinMode(CURRENT_SENSOR_PIN, INPUT_DISABLE);
-  pinMode(PRESSURE_SENSOR_PIN, INPUT_DISABLE);
-
   //set up communication
-  Wire1.begin();
+  Wire.begin();
     
   // Check ADC 
   if(adc.testConnection())
