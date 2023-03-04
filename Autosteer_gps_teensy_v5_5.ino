@@ -28,9 +28,9 @@
 /************************* User Settings *************************/
 // Serial Ports
 #define SerialAOG Serial                //AgIO USB conection
-#define SerialRTK Serial3               //RTK radio
-HardwareSerial* SerialGPS = &Serial7;   //Main postion receiver (GGA) (Serial2 must be used here with T4.0 / Basic Panda boards - Should auto swap)
-HardwareSerial* SerialGPS2 = &Serial2;  //Dual heading receiver 
+#define SerialRTK Serial7               //RTK radio
+HardwareSerial* SerialGPS = &Serial3;   //Main postion receiver (GGA) (Serial2 must be used here with T4.0 / Basic Panda boards - Should auto swap)
+HardwareSerial* SerialGPS2 = &Serial8;  //Dual heading receiver 
 HardwareSerial* SerialGPSTmp = NULL;
 //HardwareSerial* SerialAOG = &Serial;
 
@@ -78,7 +78,7 @@ uint32_t gpsReadyTime = 0;        //Used for GGA timeout
 struct ConfigIP {
     uint8_t ipOne = 192;
     uint8_t ipTwo = 168;
-    uint8_t ipThree = 1;
+    uint8_t ipThree = 0;
 };  ConfigIP networkAddress;   //3 bytes
 
 // IP & MAC address of this module of this module
@@ -120,7 +120,7 @@ bool dualReadyRelPos = false;
 
 // booleans to see if we are using CMPS or BNO08x
 bool useCMPS = false;
-bool useBNO08x = false;
+bool useBNO08x = true;
 
 //CMPS always x60
 #define CMPS14_ADDRESS 0x60
@@ -189,7 +189,7 @@ bool passThroughGPS2 = false;
 void setup()
 {
     delay(500);                         //Small delay so serial can monitor start up
-    set_arm_clock(150000000);           //Set CPU speed to 150mhz
+    //set_arm_clock(150000000);           //Set CPU speed to 150mhz
     Serial.print("CPU speed set to: ");
     Serial.println(F_CPU_ACTUAL);
 
@@ -313,17 +313,17 @@ void setup()
 
 void loop()
 {
-    if (GGA_Available == false && !passThroughGPS && !passThroughGPS2)
-    {
-        if (systick_millis_count - PortSwapTime >= 10000)
-        {
-            Serial.println("Swapping GPS ports...\r\n");
-            SerialGPSTmp = SerialGPS;
-            SerialGPS = SerialGPS2;
-            SerialGPS2 = SerialGPSTmp;
-            PortSwapTime = systick_millis_count;
-        }
-    }
+//    if (GGA_Available == false && !passThroughGPS && !passThroughGPS2)
+//    {
+//        if (systick_millis_count - PortSwapTime >= 10000)
+//        {
+//            Serial.println("Swapping GPS ports...\r\n");
+//            SerialGPSTmp = SerialGPS;
+//            SerialGPS = SerialGPS2;
+//            SerialGPS2 = SerialGPSTmp;
+//            PortSwapTime = systick_millis_count;
+//        }
+//    }
 
     // Pass NTRIP etc to GPS
     if (SerialAOG.available())
